@@ -21,8 +21,18 @@
   });
 
   $(function() {
+    var text;
     if (settings.active) {
-      return $("h5").text('sam!');
+      text = 'game of';
+      $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "')").each(function(i, e) {
+        return $(e).attr('data-txt', $(e).text()).text('KABOOM').css({
+          'background-color': 'red',
+          'color': 'white'
+        }).click(function() {
+          return $(this).text($(this).attr('data-txt'));
+        });
+      });
+      return $("h5").text('sam4!!');
     }
   });
 
