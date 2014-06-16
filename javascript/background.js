@@ -16,4 +16,14 @@
     });
   });
 
+  $(function() {
+    return $("#cb_active").click(function() {
+      if ($(this).is(":checked")) {
+        return $("#filter").removeAttr('disabled');
+      } else {
+        return $("#filter").attr('disabled', 'disabled');
+      }
+    });
+  });
+
 }).call(this);
