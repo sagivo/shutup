@@ -9,10 +9,14 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   sendResponse status: "ok"
   true
 
-$ ->
-  if settings.active
-    text = 'game of'
-    $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "')").each (i,e) ->
-      $(e).attr('data-txt',$(e).text()).text('KABOOM').css({'background-color':'red', 'color': 'white'}).click ->
-        $(this).text( $(this).attr('data-txt') )
-    $("h5").text('sam4!!')
+$ ->  
+  chrome.runtime.sendMessage type: "getSettings", (settings) ->
+    console.log "aa",settings
+    settings = settings 
+
+    if settings.enabled
+      text = settings.filter
+      $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "')").each (i,e) ->
+        $(e).attr('data-txt',$(e).text()).text('KABOOM').css({'background-color':'red', 'color': 'white'}).click ->
+          $(this).text( $(this).attr('data-txt') )
+      #$("h5").text('sam4!!')
