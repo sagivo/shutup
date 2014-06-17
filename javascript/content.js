@@ -35,12 +35,9 @@ filter = function() {
   text = settings.filter;
   console.log('filtering by', text);
   $('[data-txt]').each(function(i, e) {
-    return $(e).text($(e).attr('data-txt')).removeAttr('data-txt');
+    return $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter');
   });
   return $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "'),td:contains('" + text + "'),th:contains('" + text + "')").each(function(i, e) {
-    return $(e).attr('data-txt', $(e).text()).text('KABOOM').css({
-      'background-color': 'red',
-      'color': 'white'
-    });
+    return $(e).attr('data-txt', $(e).text()).text('KABOOM').addClass('filter');
   });
 };

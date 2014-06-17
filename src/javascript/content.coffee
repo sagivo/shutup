@@ -18,7 +18,7 @@ filter = ->
   text = settings.filter
   console.log 'filtering by', text
   $('[data-txt]').each (i,e) ->
-    $(e).text($(e).attr('data-txt')).removeAttr('data-txt')
+    $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter')
   $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "'),td:contains('" + text + "'),th:contains('" + text + "')")
   .each (i,e) ->
-    $(e).attr('data-txt',$(e).text()).text('KABOOM').css({'background-color':'red', 'color': 'white'})
+    $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
