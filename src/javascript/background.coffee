@@ -12,12 +12,9 @@ getSettings = ->
   
 
 chrome.browserAction.onClicked.addListener (tab) ->
-  #chrome.tabs.executeScript null, file: 'javascript/icon_click.js'
-  chrome.tabs.query active: true, currentWindow: true, (tabs) ->
-    chrome.tabs.sendMessage tabs[0].id, type: "hello", name: 'sam', (response) ->
-      console.log response
+  1
 
-chrome.extension.onMessage.addListener (request, sender, cb) ->
+chrome.extension.onMessage.addListener (request, sender, cb) ->  
   if request.type == 'getSettings'
     cb getSettings()
 
@@ -38,7 +35,9 @@ $ ->
     setSettings(enabled: $("#cb_active").is(":checked"))
   $("#btn_filetr").click ->
     setSettings filter: $("#filter").val()
-
+    chrome.tabs.query active: true, currentWindow: true, (tabs) ->
+      chrome.tabs.sendMessage tabs[0].id, {type: "reFilter", filter: getSettings().filter}, (response) ->
+        1
 
 setSettings = (set)->  
   localStorage.setItem( 'settings', JSON.stringify($.extend(getSettings(), set)) )

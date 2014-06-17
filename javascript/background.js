@@ -18,17 +18,7 @@ getSettings = function() {
 };
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-  return chrome.tabs.query({
-    active: true,
-    currentWindow: true
-  }, function(tabs) {
-    return chrome.tabs.sendMessage(tabs[0].id, {
-      type: "hello",
-      name: 'sam'
-    }, function(response) {
-      return console.log(response);
-    });
-  });
+  return 1;
 });
 
 chrome.extension.onMessage.addListener(function(request, sender, cb) {
@@ -59,8 +49,19 @@ $(function() {
     });
   });
   return $("#btn_filetr").click(function() {
-    return setSettings({
+    setSettings({
       filter: $("#filter").val()
+    });
+    return chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, function(tabs) {
+      return chrome.tabs.sendMessage(tabs[0].id, {
+        type: "reFilter",
+        filter: getSettings().filter
+      }, function(response) {
+        return 1;
+      });
     });
   });
 });
