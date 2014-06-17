@@ -32,6 +32,9 @@ $(function() {
 
 filter = function() {
   var filterText;
+  if (filterText.length === 0) {
+    return;
+  }
   filterText = settings.filter;
   console.log('filtering by', filterText);
   $('[data-txt]').each(function(i, e) {

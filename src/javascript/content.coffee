@@ -15,6 +15,7 @@ $ ->
     filter() if settings.enabled
 
 filter = ->
+  return if filterText.length == 0
   filterText = settings.filter
   console.log 'filtering by', filterText
   #clean
