@@ -25,7 +25,10 @@ $ ->
     $("#options").show(); $("#cb_active").attr('checked', 'checked')
   else
     $("#options").hide();  $("#cb_active").removeAttr('checked')
-  $("#filter").val(settings.filter)
+  $("#filter").val(settings.filter).tagsInput onChange: (e,t) ->
+    setSettings filter: $.map($(".tag span"), (e, i) -> $(e).text().trim()).join(",")
+    sendRefilter()
+    
   #clicks
   $("#cb_active").click ->
     if $("#cb_active").is(":checked")      
@@ -35,9 +38,11 @@ $ ->
     setSettings(enabled: $("#cb_active").is(":checked"))
   $("#btn_filetr").click ->
     setSettings filter: $("#filter").val()
-    chrome.tabs.query active: true, currentWindow: true, (tabs) ->
-      chrome.tabs.sendMessage tabs[0].id, {type: "reFilter", filter: getSettings().filter}, (response) ->
-        1
+    sendRefilter()
 
 setSettings = (set)->  
   localStorage.setItem( 'settings', JSON.stringify($.extend(getSettings(), set)) )
+
+sendRefilter = ->
+  chrome.tabs.query active: true, currentWindow: true, (tabs) ->
+    chrome.tabs.sendMessage tabs[0].id, {type: "reFilter", filter: getSettings().filter}, (response) ->

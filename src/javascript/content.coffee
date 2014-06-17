@@ -15,10 +15,16 @@ $ ->
     filter() if settings.enabled
 
 filter = ->
-  text = settings.filter
-  console.log 'filtering by', text
+  filterText = settings.filter
+  console.log 'filtering by', filterText
+  #clean
   $('[data-txt]').each (i,e) ->
-    $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter')
-  $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "'),td:contains('" + text + "'),th:contains('" + text + "')")
-  .each (i,e) ->
-    $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
+      $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter')
+  #filter
+  filterText.split(',').forEach (text) ->    
+    htmlElements = []
+    'a,p,span,td,th,strong,b,bold,h1,h2,h3,h4,h5'.split(',').forEach (htmlElement) ->
+      htmlElements.push htmlElement + ":contains('" + text + "')"
+      $(htmlElements.join(','))
+      .each (i,e) ->
+        $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')

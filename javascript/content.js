@@ -31,13 +31,20 @@ $(function() {
 });
 
 filter = function() {
-  var text;
-  text = settings.filter;
-  console.log('filtering by', text);
+  var filterText;
+  filterText = settings.filter;
+  console.log('filtering by', filterText);
   $('[data-txt]').each(function(i, e) {
     return $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter');
   });
-  return $("a:contains('" + text + "'),p:contains('" + text + "'),span:contains('" + text + "'),td:contains('" + text + "'),th:contains('" + text + "')").each(function(i, e) {
-    return $(e).attr('data-txt', $(e).text()).text('KABOOM').addClass('filter');
+  return filterText.split(',').forEach(function(text) {
+    var htmlElements;
+    htmlElements = [];
+    return 'a,p,span,td,th,strong,b,bold,h1,h2,h3,h4,h5'.split(',').forEach(function(htmlElement) {
+      htmlElements.push(htmlElement + ":contains('" + text + "')");
+      return $(htmlElements.join(',')).each(function(i, e) {
+        return $(e).attr('data-txt', $(e).text()).text('KABOOM').addClass('filter');
+      });
+    });
   });
 };
