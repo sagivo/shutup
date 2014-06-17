@@ -32,10 +32,10 @@ $(function() {
 
 filter = function() {
   var filterText;
+  filterText = settings.filter;
   if (filterText.length === 0) {
     return;
   }
-  filterText = settings.filter;
   console.log('filtering by', filterText);
   $('[data-txt]').each(function(i, e) {
     return $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter');

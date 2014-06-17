@@ -15,8 +15,8 @@ $ ->
     filter() if settings.enabled
 
 filter = ->
-  return if filterText.length == 0
   filterText = settings.filter
+  return if filterText.length == 0
   console.log 'filtering by', filterText
   #clean
   $('[data-txt]').each (i,e) ->
