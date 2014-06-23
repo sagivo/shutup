@@ -29,3 +29,8 @@ filter = ->
       $(htmlElements.join(','))
       .each (i,e) ->
         $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
+
+
+$.expr[":"].contains = jQuery.expr.createPseudo (arg) ->
+  (elem) ->
+    jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
