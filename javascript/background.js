@@ -10,7 +10,8 @@ getSettings = function() {
     return JSON.parse(settings);
   } else {
     settings = {
-      enabled: true
+      enabled: true,
+      sites: ['fb', 'twitter']
     };
     localStorage.setItem('settings', JSON.stringify(settings));
     return settings;

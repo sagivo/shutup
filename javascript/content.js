@@ -33,17 +33,17 @@ $(function() {
 filter = function() {
   var filterText;
   filterText = settings.filter;
-  if (filterText.length === 0) {
-    return;
-  }
   console.log('filtering by', filterText);
   $('[data-txt]').each(function(i, e) {
     return $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter');
   });
+  if (filterText.length === 0) {
+    return;
+  }
   return filterText.split(',').forEach(function(text) {
     var htmlElements;
     htmlElements = [];
-    return 'a,p,span,td,th,strong,b,bold,h1,h2,h3,h4,h5'.split(',').forEach(function(htmlElement) {
+    return 'p,a'.split(',').forEach(function(htmlElement) {
       htmlElements.push(htmlElement + ":contains('" + text + "')");
       return $(htmlElements.join(',')).each(function(i, e) {
         return $(e).attr('data-txt', $(e).text()).text('KABOOM').addClass('filter');

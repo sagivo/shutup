@@ -6,7 +6,7 @@ getSettings = ->
   if settings
     return JSON.parse(settings)
   else
-    settings = {enabled:true}
+    settings = {enabled:true, sites:['fb','twitter']}
     localStorage.setItem('settings', JSON.stringify(settings))
     settings 
   
