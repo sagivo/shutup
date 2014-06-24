@@ -1,6 +1,6 @@
 SHUTUP!
 ================
-![](https://raw.githubusercontent.com/sagivo/shutup/master/icons/icon128.png)
+![](https://raw.githubusercontent.com/sagivo/shutup/master/icons/icon48.png)
 
   - Don't let the internet spoil your news! 
 Block headlines, tweets, facebook posts and everything with shutup.
