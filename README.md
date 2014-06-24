@@ -1,7 +1,6 @@
-SHUTUP!
+![](https://raw.githubusercontent.com/sagivo/shutup/master/icons/icon48.png) SHUTUP!
 ================
 Finally a good spoiler killer!  
-![](https://raw.githubusercontent.com/sagivo/shutup/master/icons/icon48.png)
 
   - Don't let the internet spoil your news! 
 Block headlines, tweets, facebook posts and everything with shutup.
