@@ -79,4 +79,4 @@ $ ->
   document.body.addEventListener "CustomEvent", ->
     clearTimeout f if f
     f = setTimeout filter, 500
-    return
+    return 
