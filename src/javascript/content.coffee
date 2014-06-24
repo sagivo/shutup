@@ -34,47 +34,50 @@ $.expr[":"].contains = jQuery.expr.createPseudo (arg) ->
   (elem) ->
     jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
 
-main = ->
-  fireCustomEvent = ->
-    document.body.dispatchEvent myEvent
-  
-  myEvent = document.createEvent("Event")
-  myEvent.initEvent "CustomEvent", true, true
-  
-  #load jQuery
-  if $ and $(document).ajaxComplete
-    $(document).ajaxComplete (event, request, settings) ->
-      fireCustomEvent()
-      return
-  else
-    `
-(function(){
+$ ->
+  main = ->
+    fireCustomEvent = ->
+      document.body.dispatchEvent myEvent
+    
+    myEvent = document.createEvent("Event")
+    myEvent.initEvent "CustomEvent", true, true
+    
+    #load jQuery
+    if typeof $ != 'undefined' and typeof $(document).ajaxComplete != 'undefined'
+      $(document).ajaxComplete (event, request, settings) ->
+        fireCustomEvent()
+        return
+    else
+      `
+  (function(){
 
-  XMLHttpRequest.prototype.send = (function(orig){
-      return function(){
-          var xhr = this,
-          waiter = setInterval(function(){
-            console.log('trying');
-              if(xhr.readyState && xhr.readyState == 4){                  
-                  fireCustomEvent();
-                  clearInterval(waiter);
-              }
-          }, 250);
-          return orig.apply(this, arguments);
-      };
-  })(XMLHttpRequest.prototype.send);
+    XMLHttpRequest.prototype.send = (function(orig){
+        return function(){
+            var xhr = this,
+            waiter = setInterval(function(){
+              console.log('trying2');
+                if(xhr.readyState && xhr.readyState == 4){                  
+                    fireCustomEvent();
+                    clearInterval(waiter);
+                }
+            }, 250);
+            return orig.apply(this, arguments);
+        };
+    })(XMLHttpRequest.prototype.send);
 
-})();
-    `
-    return    
+  })();
+      `
+      return    
 
-# Lets create the script objects
-injectedScript = document.createElement("script")
-injectedScript.type = "text/javascript"
-injectedScript.text = "(" + main + ")(\"\");"
-(document.body or document.head).appendChild injectedScript
-f = null
-document.body.addEventListener "CustomEvent", ->
-  clearTimeout f if f
-  f = setTimeout filter, 500
-  return
+  # Lets create the script objects
+  injectedScript = document.createElement("script")
+  injectedScript.type = "text/javascript"
+  injectedScript.text = "(" + main + ")(\"\");"
+  (document.body or document.head).appendChild injectedScript
+  f = null
+  document.body.addEventListener "CustomEvent", ->
+    clearTimeout f if f
+    f = setTimeout filter, 500
+    return
+
+  filter()  
