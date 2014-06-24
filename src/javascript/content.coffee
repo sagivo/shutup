@@ -1,4 +1,4 @@
-settings = active:true
+settings = active:true; filterFlag = true
 console.log 'content'
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
@@ -15,20 +15,25 @@ chrome.runtime.sendMessage type: "getSettings", (set) ->
   filter()    
 
 filter = ->
-  filterText = settings.filter
-  console.log 'filtering by', filterText
-  #clean
-  $('[data-txt]').each (i,e) ->
-      $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter')
-  return if filterText.length == 0
-  #filter  
-  filterText.split(',').forEach (text) ->    
-    htmlElements = [];
-    'p,a'.split(',').forEach (htmlElement) ->
-      htmlElements.push htmlElement + ":contains('" + text + "')"
-      $(htmlElements.join(','))
-      .each (i,e) ->
-        $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
+  if filterFlag
+    filter = false; 
+    setTimeout (->
+      flag = true
+    ), 500
+    filterText = settings.filter
+    console.log 'filtering by', filterText
+    #clean
+    $('[data-txt]').each (i,e) ->
+        $(e).text($(e).attr('data-txt')).removeAttr('data-txt').removeClass('filter')
+    return if filterText.length == 0
+    #filter  
+    filterText.split(',').forEach (text) ->    
+      htmlElements = [];
+      'p,a'.split(',').forEach (htmlElement) ->
+        htmlElements.push htmlElement + ":contains('" + text + "')"
+        $(htmlElements.join(','))
+        .each (i,e) ->
+          $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
 
 
 $.expr[":"].contains = jQuery.expr.createPseudo (arg) ->
@@ -49,25 +54,21 @@ $ ->
         fireCustomEvent()
         return
     else
-      `
-  (function(){
-
-    XMLHttpRequest.prototype.send = (function(orig){
-        return function(){
-            var xhr = this,
-            waiter = setInterval(function(){
-              console.log('trying2');
-                if(xhr.readyState && xhr.readyState == 4){                  
-                    fireCustomEvent();
-                    clearInterval(waiter);
-                }
-            }, 250);
-            return orig.apply(this, arguments);
-        };
-    })(XMLHttpRequest.prototype.send);
-
-  })();
-      `
+      `(function(){
+        XMLHttpRequest.prototype.send = (function(orig){
+            return function(){
+                var xhr = this,
+                waiter = setInterval(function(){
+                  console.log('trying2');
+                    if(xhr.readyState && xhr.readyState == 4){                  
+                        fireCustomEvent();
+                        clearInterval(waiter);
+                    }
+                }, 250);
+                return orig.apply(this, arguments);
+            };
+        })(XMLHttpRequest.prototype.send);
+      })();`
       return    
 
   # Lets create the script objects
