@@ -1,6 +1,3 @@
-console.log '----------bg-----------'
-#localStorage.clear()
-
 getSettings = ->  
   settings = localStorage.getItem('settings')
   if settings
@@ -10,10 +7,6 @@ getSettings = ->
     localStorage.setItem('settings', JSON.stringify(settings))
     settings 
   
-
-chrome.browserAction.onClicked.addListener (tab) ->
-  1
-
 chrome.extension.onMessage.addListener (request, sender, cb) ->  
   if request.type == 'getSettings'
     cb getSettings()

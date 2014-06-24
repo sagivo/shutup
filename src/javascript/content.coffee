@@ -1,6 +1,7 @@
 settings = active:true; filterFlag = true
 console.log 'content'
 
+#subscribe to events
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   console.log 'content msg',request
   if request.type == "reFilter"
@@ -8,14 +9,13 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     filter()
   sendResponse status: "ok"
 
-#get settings
+#get initial settings
 chrome.runtime.sendMessage type: "getSettings", (set) ->
-  console.log "content settings",set
   settings = set 
-  filter()    
+  filter()  
 
 filter = ->
-  if filterFlag
+  if filterFlag #filter no faster than each 500 ms
     filter = false; 
     setTimeout (->
       flag = true
@@ -48,12 +48,12 @@ $ ->
     myEvent = document.createEvent("Event")
     myEvent.initEvent "CustomEvent", true, true
     
-    #load jQuery
+    #hook to ajax events
     if typeof $ != 'undefined' and typeof $(document).ajaxComplete != 'undefined'
       $(document).ajaxComplete (event, request, settings) ->
         fireCustomEvent()
         return
-    else
+    else #an ugly hook to mimik jQuery ajaxComplete in case page doesn't have jQuery
       `(function(){
         XMLHttpRequest.prototype.send = (function(orig){
             return function(){
@@ -71,7 +71,7 @@ $ ->
       })();`
       return    
 
-  # Lets create the script objects
+  # Lets create the script objects to inject
   injectedScript = document.createElement("script")
   injectedScript.type = "text/javascript"
   injectedScript.text = "(" + main + ")(\"\");"

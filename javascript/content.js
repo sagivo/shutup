@@ -23,7 +23,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 chrome.runtime.sendMessage({
   type: "getSettings"
 }, function(set) {
-  console.log("content settings", set);
   settings = set;
   return filter();
 });
