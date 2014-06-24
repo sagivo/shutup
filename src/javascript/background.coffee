@@ -13,6 +13,7 @@ chrome.extension.onMessage.addListener (request, sender, cb) ->
 
 $ ->
   settings = getSettings()
+  console.log 'settings', settings
   #init  
   if settings.enabled
     $("#options").show(); $("#cb_active").attr('checked', 'checked')
@@ -29,13 +30,13 @@ $ ->
     else
       $("#options").slideUp()
     setSettings(enabled: $("#cb_active").is(":checked"))
-  $("#btn_filetr").click ->
-    setSettings filter: $("#filter").val()
-    sendRefilter()
+  
+  setSettings(enabled: $("#cb_active").is(":checked"))
 
 setSettings = (set)->  
   localStorage.setItem( 'settings', JSON.stringify($.extend(getSettings(), set)) )
 
 sendRefilter = ->
+  return unless getSettings().enabled
   chrome.tabs.query active: true, currentWindow: true, (tabs) ->
-    chrome.tabs.sendMessage tabs[0].id, {type: "reFilter", filter: getSettings().filter}, (response) ->
+    chrome.tabs.sendMessage tabs[0].id, {type: "reFilter", filter: getSettings().filter, enabled: true}, (response) ->

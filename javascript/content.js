@@ -2,7 +2,7 @@
 var filter, filterFlag, settings;
 
 settings = {
-  active: true
+  enabled: false
 };
 
 filterFlag = true;
@@ -12,7 +12,7 @@ console.log('content');
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log('content msg', request);
   if (request.type === "reFilter") {
-    settings.filter = request.filter;
+    settings = request;
     filter();
   }
   return sendResponse({
@@ -29,11 +29,13 @@ chrome.runtime.sendMessage({
 
 filter = function() {
   var filterText;
+  if (!(settings != null ? settings.enabled : void 0)) {
+    return;
+  }
   if (filterFlag) {
-    filter = false;
+    filterFlag = false;
     setTimeout((function() {
-      var flag;
-      return flag = true;
+      return filterFlag = true;
     }), 500);
     filterText = settings.filter;
     console.log('filtering by', filterText);
@@ -49,21 +51,20 @@ filter = function() {
       return 'p,a'.split(',').forEach(function(htmlElement) {
         htmlElements.push(htmlElement + ":contains('" + text + "')");
         return $(htmlElements.join(',')).each(function(i, e) {
-          return $(e).attr('data-txt', $(e).text()).text('KABOOM').addClass('filter');
+          return $(e).attr('data-txt', $(e).text()).text('SHUTUP!').addClass('filter');
         });
       });
     });
   }
 };
 
-$.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
-  return function(elem) {
-    return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-  };
-});
-
 $(function() {
   var f, injectedScript, main;
+  $.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
+    return function(elem) {
+      return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+  });
   main = function() {
     var fireCustomEvent, myEvent;
     fireCustomEvent = function() {
@@ -99,9 +100,6 @@ $(function() {
   (document.body || document.head).appendChild(injectedScript);
   f = null;
   return document.body.addEventListener("CustomEvent", function() {
-    if (f) {
-      clearTimeout(f);
-    }
-    f = setTimeout(filter, 500);
+    filter();
   });
 });

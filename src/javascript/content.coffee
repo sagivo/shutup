@@ -1,11 +1,11 @@
-settings = active:true; filterFlag = true
+settings = enabled:false; filterFlag = true
 console.log 'content'
 
 #subscribe to events
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
-  console.log 'content msg',request
+  console.log 'content msg',request  
   if request.type == "reFilter"
-    settings.filter = request.filter
+    settings = request
     filter()
   sendResponse status: "ok"
 
@@ -15,10 +15,11 @@ chrome.runtime.sendMessage type: "getSettings", (set) ->
   filter()  
 
 filter = ->
+  return unless settings?.enabled
   if filterFlag #filter no faster than each 500 ms
-    filter = false; 
+    filterFlag = false; 
     setTimeout (->
-      flag = true
+      filterFlag = true
     ), 500
     filterText = settings.filter
     console.log 'filtering by', filterText
@@ -33,14 +34,13 @@ filter = ->
         htmlElements.push htmlElement + ":contains('" + text + "')"
         $(htmlElements.join(','))
         .each (i,e) ->
-          $(e).attr('data-txt',$(e).text()).text('KABOOM').addClass('filter')
-
-
-$.expr[":"].contains = jQuery.expr.createPseudo (arg) ->
-  (elem) ->
-    jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
+          $(e).attr('data-txt',$(e).text()).text('SHUTUP!').addClass('filter')
 
 $ ->
+  $.expr[":"].contains = jQuery.expr.createPseudo (arg) ->
+    (elem) ->
+      jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
+
   main = ->
     fireCustomEvent = ->
       document.body.dispatchEvent myEvent
@@ -78,6 +78,5 @@ $ ->
   (document.body or document.head).appendChild injectedScript
   f = null
   document.body.addEventListener "CustomEvent", ->
-    clearTimeout f if f
-    f = setTimeout filter, 500
+    filter()
     return 

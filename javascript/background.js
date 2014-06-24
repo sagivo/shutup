@@ -25,6 +25,7 @@ chrome.extension.onMessage.addListener(function(request, sender, cb) {
 $(function() {
   var settings;
   settings = getSettings();
+  console.log('settings', settings);
   if (settings.enabled) {
     $("#options").show();
     $("#cb_active").attr('checked', 'checked');
@@ -33,7 +34,7 @@ $(function() {
     $("#cb_active").removeAttr('checked');
   }
   $("#filter").val(settings.filter).tagsInput({
-    minChars: 1,
+    minChars: 3,
     onChange: function(e, t) {
       setSettings({
         filter: $.map($(".tag span"), function(e, i) {
@@ -53,11 +54,8 @@ $(function() {
       enabled: $("#cb_active").is(":checked")
     });
   });
-  return $("#btn_filetr").click(function() {
-    setSettings({
-      filter: $("#filter").val()
-    });
-    return sendRefilter();
+  return setSettings({
+    enabled: $("#cb_active").is(":checked")
   });
 });
 
@@ -66,13 +64,17 @@ setSettings = function(set) {
 };
 
 sendRefilter = function() {
+  if (!getSettings().enabled) {
+    return;
+  }
   return chrome.tabs.query({
     active: true,
     currentWindow: true
   }, function(tabs) {
     return chrome.tabs.sendMessage(tabs[0].id, {
       type: "reFilter",
-      filter: getSettings().filter
+      filter: getSettings().filter,
+      enabled: true
     }, function(response) {});
   });
 };
