@@ -48,7 +48,7 @@ filter = function() {
     return filterText.split(',').forEach(function(text) {
       var htmlElements;
       htmlElements = [];
-      return 'p,a'.split(',').forEach(function(htmlElement) {
+      return 'p,a,span'.split(',').forEach(function(htmlElement) {
         htmlElements.push(htmlElement + ":contains('" + text + "')");
         return $(htmlElements.join(',')).each(function(i, e) {
           return $(e).attr('data-txt', $(e).text()).text('SHUTUP!').addClass('filter');

@@ -30,7 +30,7 @@ filter = ->
     #filter  
     filterText.split(',').forEach (text) ->    
       htmlElements = [];
-      'p,a'.split(',').forEach (htmlElement) ->
+      'p,a,span'.split(',').forEach (htmlElement) ->
         htmlElements.push htmlElement + ":contains('" + text + "')"
         $(htmlElements.join(','))
         .each (i,e) ->
