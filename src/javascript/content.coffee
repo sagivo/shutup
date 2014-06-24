@@ -14,6 +14,30 @@ $ ->
     settings = set 
     filter() if settings.enabled
 
+  main = ->
+    fireCustomEvent = ->
+      document.body.dispatchEvent myEvent
+    
+    myEvent = document.createEvent("Event")
+    myEvent.initEvent "CustomEvent", true, true
+    
+    jQuery(document).ajaxComplete (event, request, settings) ->
+      fireCustomEvent()
+      return
+    return
+
+  # Lets create the script objects
+  injectedScript = document.createElement("script")
+  injectedScript.type = "text/javascript"
+  injectedScript.text = "(" + main + ")(\"\");"
+  (document.body or document.head).appendChild injectedScript
+  f = null
+  document.body.addEventListener "CustomEvent", ->
+    clearTimeout f if f
+    f = setTimeout filter, 500
+    return
+
+
 filter = ->
   filterText = settings.filter
   console.log 'filtering by', filterText

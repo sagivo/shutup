@@ -19,7 +19,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 $(function() {
-  return chrome.runtime.sendMessage({
+  var f, injectedScript, main;
+  chrome.runtime.sendMessage({
     type: "getSettings"
   }, function(set) {
     console.log("content settings", set);
@@ -27,6 +28,28 @@ $(function() {
     if (settings.enabled) {
       return filter();
     }
+  });
+  main = function() {
+    var fireCustomEvent, myEvent;
+    fireCustomEvent = function() {
+      return document.body.dispatchEvent(myEvent);
+    };
+    myEvent = document.createEvent("Event");
+    myEvent.initEvent("CustomEvent", true, true);
+    jQuery(document).ajaxComplete(function(event, request, settings) {
+      fireCustomEvent();
+    });
+  };
+  injectedScript = document.createElement("script");
+  injectedScript.type = "text/javascript";
+  injectedScript.text = "(" + main + ")(\"\");";
+  (document.body || document.head).appendChild(injectedScript);
+  f = null;
+  return document.body.addEventListener("CustomEvent", function() {
+    if (f) {
+      clearTimeout(f);
+    }
+    f = setTimeout(filter, 500);
   });
 });
 

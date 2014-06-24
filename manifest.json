@@ -9,7 +9,7 @@
   },
   "permissions": [ "tabs", "activeTab", "contextMenus", "declarativeContent", "http://*/*", "https://*/*" ],
   "content_scripts":[{ 
-    "matches": ["http://*/*", "https://*/*"], 
+    "matches": ["*://*/*"], 
     "css": ["css/style.css"],
     "js": ["javascript/jquery-2.1.1.min.js", "javascript/content.js"]
   }],
