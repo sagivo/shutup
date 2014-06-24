@@ -22,7 +22,8 @@ chrome.runtime.sendMessage({
   type: "getSettings"
 }, function(set) {
   console.log("content settings", set);
-  return settings = set;
+  settings = set;
+  return filter();
 });
 
 filter = function() {
@@ -93,11 +94,10 @@ $(function() {
   injectedScript.text = "(" + main + ")(\"\");";
   (document.body || document.head).appendChild(injectedScript);
   f = null;
-  document.body.addEventListener("CustomEvent", function() {
+  return document.body.addEventListener("CustomEvent", function() {
     if (f) {
       clearTimeout(f);
     }
     f = setTimeout(filter, 500);
   });
-  return filter();
 });

@@ -11,7 +11,8 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
 #get settings
 chrome.runtime.sendMessage type: "getSettings", (set) ->
   console.log "content settings",set
-  settings = set     
+  settings = set 
+  filter()    
 
 filter = ->
   filterText = settings.filter
@@ -79,5 +80,3 @@ $ ->
     clearTimeout f if f
     f = setTimeout filter, 500
     return
-
-  filter()  
