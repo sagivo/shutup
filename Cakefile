@@ -1,3 +1,4 @@
+#generate css and js files from src folder
 cp = require 'child_process'
 
 task 'hello', 'bla vla', (options) ->
