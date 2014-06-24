@@ -39,6 +39,7 @@ $(function() {
     $("#cb_active").removeAttr('checked');
   }
   $("#filter").val(settings.filter).tagsInput({
+    minChars: 3,
     onChange: function(e, t) {
       setSettings({
         filter: $.map($(".tag span"), function(e, i) {
