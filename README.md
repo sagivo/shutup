@@ -1,11 +1,12 @@
 SHUTUP!
 ================
+[SHUTUP!](https://github.com/sagivo/shutup/blob/master/icons/icon128.png "SHUTUP!")
+
   - Don't let the internet spoil your news! 
 Block headlines, tweets, facebook posts and everything with shutup.
 
   - Simply replace any content you want to filter on the web with a SHUTUP! lable.
   - Easy to manage few keywords you wish to hide so you'll not find out how your favoriet movie ends. 
-
   - When you're ready to read spoilers again you can remove anything you've blocked by clicking the plugin button.
 
 Install
