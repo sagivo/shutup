@@ -18,7 +18,7 @@ $ ->
     $("#options").show(); $("#cb_active").attr('checked', 'checked')
   else
     $("#options").hide();  $("#cb_active").removeAttr('checked')
-  $("#filter").val(settings.filter).tagsInput minChars: 1, onChange: (e,t) ->
+  $("#filter").val(settings.filter).tagsInput minChars: 3, onChange: (e,t) ->
     setSettings filter: $.map($(".tag span"), (e, i) -> $(e).text().trim()).join(",")
     sendRefilter()
     
